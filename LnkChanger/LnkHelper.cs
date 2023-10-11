@@ -22,17 +22,9 @@ namespace LnkChanger
             // Load the shortcut.
             Shell32.ShellLinkObject currentLink = GetShellLinkObject(shortcutFullPath);
 
-            // Устанавливаем рабочую директорию
-            //currentLink.WorkingDirectory = Path.GetDirectoryName(newPath);
-
             // Сохраняем путь, на который указывал ярлык
             string oldPath = currentLink.Path;
             currentLink.Path = newPath;
-
-            //Shell32.Folder folder = shell.NameSpace(Path.GetDirectoryName(newPath));
-            //Shell32.FolderItem folderItem = folder.Items().Item(Path.GetFileName(newPath));
-
-            //currentLink.GetType().GetProperty("Target", System.Reflection.BindingFlags.SetProperty).SetValue(currentLink, folderItem);
 
             // Получаем индекс иконки
             int iconIndex = currentLink.GetIconLocation(out string _);
@@ -43,13 +35,8 @@ namespace LnkChanger
             // Устанавливаем иконку, так как она сбрасывается после смены пути в ярлыке
             currentLink.SetIconLocation(oldPath, iconIndex);
 
-            //currentLink.Resolve(8);
-
             // Сохраняем изменения
             currentLink.Save();
-
-            
-
         }
         
         private static Shell32.ShellLinkObject GetShellLinkObject(string shortcutFullPath)
