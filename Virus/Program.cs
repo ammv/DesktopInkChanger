@@ -32,7 +32,6 @@ namespace Virus
             }
         }
 
-
         private static string QuotedMarked(string value)
         {
             return $"\"{value}\"";
