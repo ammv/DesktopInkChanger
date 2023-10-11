@@ -49,7 +49,7 @@ namespace LnkChanger
         }
 
         /// <summary>
-        /// Получает ярлык по пути
+        /// Получает путь, на который указывает ярлык
         /// </summary>
         /// <param name="shortcutFullPath">Полный путь к ярлыку</param>
         /// <returns></returns>
