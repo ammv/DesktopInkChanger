@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Virus", "Virus\Virus.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShellLinkChanger", "ShellLinkChanger\ShellLinkChanger.csproj", "{8072687B-5D8B-4FBD-B1CF-C58A030DDB54}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{6E091FC9-3B06-497E-B8EC-6FC834AA9702}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{8072687B-5D8B-4FBD-B1CF-C58A030DDB54}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8072687B-5D8B-4FBD-B1CF-C58A030DDB54}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8072687B-5D8B-4FBD-B1CF-C58A030DDB54}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E091FC9-3B06-497E-B8EC-6FC834AA9702}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E091FC9-3B06-497E-B8EC-6FC834AA9702}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E091FC9-3B06-497E-B8EC-6FC834AA9702}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E091FC9-3B06-497E-B8EC-6FC834AA9702}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

